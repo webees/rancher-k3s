@@ -7,6 +7,7 @@ curl -sfL https://get.k3s.io | sh -s - server \
    # --disable traefik \
    --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
 
+# INSTALL_K3S_MIRROR
 curl -sfL https://docs.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server \
    # --disable traefik \
    --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
