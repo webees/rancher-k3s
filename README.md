@@ -34,6 +34,7 @@ crictl info
 # traefik2
 
 ```shell
+# Execute before k3s installation
 mkdir -p /var/lib/rancher/k3s/server/manifests
 
 cat << EOF > /var/lib/rancher/k3s/server/manifests/traefik.yml
