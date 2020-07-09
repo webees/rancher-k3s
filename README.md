@@ -78,6 +78,14 @@ kubectl get deploy -A | grep tiller
 kubectl get pods -n gitlab-managed-apps
 ```
 
+- fix x509
+```
+hostNetwork: true
+env:
+- name: CI_SERVER_TLS_CA_FILE
+  value: /home/gitlab-runner/.gitlab-runner/certs/ca.test.crt
+```
+
 # traefik2
 
 ```shell
