@@ -32,6 +32,46 @@ crictl ps
 crictl info
 ```
 
+# gitlab
+
+> https://gitlab.com/help/user/project/clusters/add_remove_clusters.md
+
+- API URL
+```
+kubectl cluster-info | grep 'Kubernetes master' | awk '/http/ {print $NF}'
+```
+
+- CA certificate
+```
+kubectl get secret $(kubectl get secret | grep default-token | awk '{print $1}') -o jsonpath="{['data']['ca\.crt']}" | base64 --decode
+```
+
+- Token
+```
+cat <<EOF | kubectl apply -f -  
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab-admin
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: gitlab-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: gitlab-admin
+  namespace: kube-system
+EOF
+
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep gitlab-admin | awk '{print $1}')
+```
+
 # traefik2
 
 ```shell
