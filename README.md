@@ -86,7 +86,7 @@ env:
   value: /home/gitlab-runner/.gitlab-runner/certs/ca.test.crt
 - name: RUNNER_PRE_CLONE_SCRIPT
   value: |-
-    cat> /etc/hosts <<EOF
+    cat>> /etc/hosts <<EOF
     192.168.28.123 git.com
     192.168.28.123 reg.git.com
     EOF
