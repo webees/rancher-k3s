@@ -85,7 +85,11 @@ env:
 - name: CI_SERVER_TLS_CA_FILE
   value: /home/gitlab-runner/.gitlab-runner/certs/ca.test.crt
 - name: RUNNER_PRE_CLONE_SCRIPT
-  value: echo '192.168.28.123 git.com' >> /etc/hosts
+  value: |-
+    cat> /etc/hosts <<EOF
+    192.168.28.123 git.com
+    192.168.28.123 reg.git.com
+    EOF
 ```
 
 # traefik2
