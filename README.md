@@ -72,6 +72,11 @@ EOF
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep gitlab-admin | awk '{print $1}')
 ```
 
+- check
+```
+kubectl get deploy --all-namespaces | grep tiller
+```
+
 # traefik2
 
 ```shell
