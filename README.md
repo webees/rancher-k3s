@@ -74,7 +74,8 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 
 - check
 ```
-kubectl get deploy --all-namespaces | grep tiller
+kubectl get deploy -A | grep tiller
+kubectl get pods -n gitlab-managed-apps
 ```
 
 # traefik2
