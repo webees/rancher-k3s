@@ -32,7 +32,7 @@ crictl ps
 crictl info
 ```
 
-# gitlab
+# gitlab-runner
 
 > https://gitlab.com/help/user/project/clusters/add_remove_clusters.md
 
@@ -80,10 +80,12 @@ kubectl get pods -n gitlab-managed-apps
 
 - fix x509
 ```
-hostNetwork: true
 env:
 - name: CI_SERVER_TLS_CA_FILE
   value: /home/gitlab-runner/.gitlab-runner/certs/ca.test.crt
+volumeMounts:
+- name: ca-test
+  mountPath: /home/gitlab-runner/.gitlab-runner/certs
 ```
 
 - fix hosts
