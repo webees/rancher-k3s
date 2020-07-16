@@ -83,6 +83,10 @@ kubectl get pods -n gitlab-managed-apps
 env:
 - name: CI_SERVER_TLS_CA_FILE
   value: /home/gitlab-runner/.gitlab-runner/certs/ca.test.crt
+- name: RUNNER_BUILDS_DIR
+  value: /opt/gitlab-runner/builds
+- name: RUNNER_CACHE_DIR
+  value: /opt/gitlab-runner/cache
 volumeMounts:
 - name: ca-test
   mountPath: /home/gitlab-runner/.gitlab-runner/certs
