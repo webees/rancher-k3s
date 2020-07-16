@@ -88,6 +88,23 @@ volumeMounts:
   mountPath: /home/gitlab-runner/.gitlab-runner/certs
 ```
 
+- fix configmap
+```
+entrypoint: |-
+############################################
+sed -i '$d' ~/.gitlab-runner/config.toml
+cat >> ~/.gitlab-runner/config.toml << EOF
+    [[runners.kubernetes.volumes.host_path]]
+      name = "gitlab-runner"
+      mount_path = "/opt/gitlab-runner/"
+      read_only = false
+      host_path = "/home/gitlab/runner/"
+EOF
+
+# Start the runner
+############################################
+```
+
 - fix hosts
 ```
 - name: RUNNER_PRE_CLONE_SCRIPT # optional
