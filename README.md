@@ -84,6 +84,10 @@ hostNetwork: true
 env:
 - name: CI_SERVER_TLS_CA_FILE
   value: /home/gitlab-runner/.gitlab-runner/certs/ca.test.crt
+```
+
+- fix hosts
+```
 - name: RUNNER_PRE_CLONE_SCRIPT # optional
   value: |-
     cat>> /etc/hosts <<EOF
