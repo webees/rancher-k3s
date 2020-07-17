@@ -103,6 +103,11 @@ cat >> ~/.gitlab-runner/config.toml << EOF
       mount_path = "/opt/gitlab-runner/"
       read_only = false
       host_path = "/home/gitlab/runner/"
+    [[runners.kubernetes.volumes.host_path]]
+      name = "docker"
+      mount_path = "/var/run/docker.sock"
+      read_only = true
+      host_path = "/var/run/docker.sock"
 EOF
 
 # Start the runner
