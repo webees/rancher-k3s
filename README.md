@@ -56,7 +56,7 @@ k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/ranch
 
 helm install rancher rancher-stable/rancher \
   --namespace cattle-system \
-  --set hostname=rancher.dev.run \
+  --set hostname=rancher.pro.run \
   --set ingress.tls.source=secret \
   --set tls=external \
   --set privateCA=true
