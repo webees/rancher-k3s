@@ -32,6 +32,44 @@ crictl ps
 crictl info
 ```
 
+
+# helm3
+
+```shell
+$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+$ helm version
+```
+
+# rancher
+
+```shell
+1$ helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+
+2$ helm repo add rancher-stable http://rancher-mirror.oss-cn-beijing.aliyuncs.com/server-charts/stable
+
+helm repo update
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+k3s kubectl create ns cattle-system
+k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/rancher/cacerts.pem
+
+helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --set hostname=rancher.dev.run \
+  --set ingress.tls.source=secret \
+  --set tls=external \
+  --set privateCA=true
+
+k3s kubectl -n cattle-system rollout status deploy/rancher
+k3s kubectl -n cattle-system get deploy rancher
+```
+
+- reset-password
+```
+k3s kubectl --kubeconfig $KUBECONFIG -n cattle-system exec $(k3s kubectl --kubeconfig $KUBECONFIG -n cattle-system get pods -l app=rancher | grep '1/1' | head -1 | awk '{ print $1 }') -- reset-password
+```
+
 # gitlab-runner
 
 > https://gitlab.com/help/user/project/clusters/add_remove_clusters.md
