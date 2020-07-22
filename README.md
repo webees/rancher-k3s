@@ -1,6 +1,8 @@
 # k3s
 
 ```shell
+swapoff -a
+
 /usr/local/bin/k3s-uninstall.sh
 
 curl -sfL https://get.k3s.io | sh -s - server \
