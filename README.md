@@ -29,7 +29,7 @@ cat >>/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl<<EOF
 [plugins.cri.registry.configs."reg.xxx.com".tls]
   ca_file   = "/etc/rancher/cacerts.pem"
 
-[plugins.cri.registry.configs.auths."https://reg.git.com"]
+[plugins.cri.registry.configs.auths."https://reg.xxx.com"]
   auth = "xxxxxxxxxxxxx"
 
 EOF
