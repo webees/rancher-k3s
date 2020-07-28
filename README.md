@@ -27,6 +27,7 @@ cat >>/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl<<EOF
     endpoint = ["https://reg.git.com"]
 
 [plugins.cri.registry.configs."reg.xxx.com".tls]
+  insecure_skip_verify = true
   ca_file   = "/etc/rancher/cacerts.pem"
 
 [plugins.cri.registry.configs.auths."https://reg.xxx.com"]
