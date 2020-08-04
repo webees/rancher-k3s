@@ -16,24 +16,15 @@ curl -sfL https://docs.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh 
 ```
 
 ```shell
-cd /var/lib/rancher/k3s/agent/etc/containerd
-cp config.toml config.toml.tmpl
-
-cat >>/var/lib/rancher/k3s/agent/etc/containerd/config.toml.tmpl<<EOF
-[plugins.cri.registry.mirrors]
-  [plugins.cri.registry.mirrors."docker.io"]
-    endpoint = ["https://docker.mirrors.ustc.edu.cn"]
-  [plugins.cri.registry.mirrors."reg.xxx.com"]
-    endpoint = ["https://reg.git.com"]
-
-[plugins.cri.registry.configs."reg.xxx.com".tls]
-  insecure_skip_verify = true
-  ca_file   = "/etc/rancher/cacerts.pem"
-
-[plugins.cri.registry.configs.auths."https://reg.xxx.com"]
-  auth = "xxxxxxxxxxxxx"
+cat << EOF > /etc/rancher/k3s/registries.yaml
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://docker.mirrors.ustc.edu.cn" 
 EOF
+```
 
+```shell
 systemctl restart k3s
 systemctl status k3s
 k3s kubectl get nodes
