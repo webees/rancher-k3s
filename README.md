@@ -4,6 +4,7 @@
 swapoff -a
 
 /usr/local/bin/k3s-uninstall.sh
+/usr/local/bin/k3s-agent-uninstall.sh
 
 curl -sfL https://get.k3s.io | sh -s - server \
    # --disable traefik \
