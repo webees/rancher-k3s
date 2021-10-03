@@ -1,3 +1,9 @@
+# prometheus
+
+```shell
+apt install prometheus-node-exporter
+```
+
 # k3s
 
 ```shell
