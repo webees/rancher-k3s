@@ -94,6 +94,7 @@ helm install rancher rancher-stable/rancher \
 
 k3s kubectl -n cattle-system rollout status deploy/rancher
 k3s kubectl -n cattle-system get deploy rancher
+k3s kubectl -n cattle-system get pods
 ```
 
 - reset-password
