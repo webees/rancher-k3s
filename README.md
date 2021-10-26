@@ -11,14 +11,15 @@ curl -s http://127.0.0.1:9100/metrics | curl --data-binary @- http://127.0.0.1:9
 ```shell
 swapoff -a
 
+# High Availability with Embedded DB
+curl -sfL https://get.k3s.io | sh -
+
+# High Availability with an External DB
 curl -sfL https://get.k3s.io | sh -s - server \
-   # --disable traefik \
    --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
 
 # INSTALL_K3S_MIRROR
-curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -s - server \
-   # --disable traefik \
-   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
+curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
 ```
 
 ```shell
