@@ -46,6 +46,7 @@ systemctl status k3s
 k3s kubectl get nodes
 k3s kubectl get pods -A
 k3s kubectl get svc -A
+k3s kubectl delete pod --grace-period=0 --force --namespace $namespace $name
 crictl ps
 crictl info
 ```
