@@ -1,3 +1,19 @@
+# docker-compose
+```
+version: '3'
+services:
+  rancher:
+    image: 'rancher/rancher:v2.5.12-rc1'
+    privileged: true
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./data:/var/lib/rancher
+      - /run/shm/rancher/auditlog:/var/log/auditlog
+    environment:
+      - TZ=Asia/Shanghai
+```
+
 # ansible
 
 ```
