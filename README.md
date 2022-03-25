@@ -116,14 +116,17 @@ helm version
 3$ helm repo add rancher-stable http://rancher-mirror.cnrancher.com/server-charts/stable
 
 helm repo update
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
+source .bash_profile
+
 k3s kubectl create ns cattle-system
 k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/rancher/cacerts.pem
 
 # helm upgrade --install
 helm install rancher rancher-stable/rancher \
   --namespace cattle-system \
-  --version 2.5.11 \
+  --version 2.5.12 \
   --set hostname=rancher.dev.run \
   --set ingress.tls.source=secret \
   --set tls=external \
