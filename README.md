@@ -113,6 +113,8 @@ helm version
 
 2$ helm repo add rancher-stable http://rancher-mirror.oss-cn-beijing.aliyuncs.com/server-charts/stable
 
+3$ helm repo add rancher-stable http://rancher-mirror.cnrancher.com/server-charts/stable
+
 helm repo update
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 k3s kubectl create ns cattle-system
