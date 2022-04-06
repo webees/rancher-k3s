@@ -2,6 +2,40 @@
 ```
 https://github.com/linuxserver/docker-wireguard
 
+
+docker run -d \
+  --name=wireguard \
+  --cap-add=NET_ADMIN \
+  --cap-add=SYS_MODULE \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Asia/Shanghai \
+  -e SERVERURL=0.0.0.0 \
+  -e SERVERPORT=51820 \
+  -e PEERS=2 \
+  -e PEERDNS=auto \
+  -e INTERNAL_SUBNET=10.10.10.0 \
+  -e ALLOWEDIPS=10.10.10.1/24 \
+  -v /root/.wireguard/config:/config \
+  -v /lib/modules:/lib/modules \
+  --net=host \
+  --restart unless-stopped \
+  linuxserver/wireguard
+
+
+
+docker run -d \
+  --name=wireguard \
+  --cap-add=NET_ADMIN \
+  --cap-add=SYS_MODULE \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Asia/Shanghai \
+  -v /root/.wireguard/config:/config \
+  -v /lib/modules:/lib/modules \
+  --net=host \
+  --restart unless-stopped \
+  linuxserver/wireguard
 ```
 
 
