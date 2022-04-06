@@ -1,6 +1,6 @@
 # WireGuard 
 ```
-https://www.wireguard.com/install/
+https://github.com/linuxserver/docker-wireguard
 
 ```
 
@@ -52,7 +52,7 @@ curl -sfL https://get.k3s.io | sh -s - server \
    --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
 
 # INSTALL_K3S_MIRROR
-curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.14+k3s1 INSTALL_K3S_MIRROR=cn sh -s - --docker --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%'
+curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.14+k3s1 INSTALL_K3S_MIRROR=cn sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
 ```
 
 ```shell
@@ -87,7 +87,7 @@ cat /var/lib/rancher/k3s/server/node-token
 
 curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.14+k3s1 INSTALL_K3S_MIRROR=cn K3S_URL=https://192.168.28.100:6443 K3S_TOKEN=K10fb4da3a53effbed27e5f5875f5505eb45a49cf995d9adbd0f85064c2e2a7ae17::server:a019f0db1cf838ea796002d4b1bc54a1 sh -
 
-curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.14+k3s1 INSTALL_K3S_MIRROR=cn K3S_URL=https://192.168.28.100:6443 K3S_TOKEN=K10fb4da3a53effbed27e5f5875f5505eb45a49cf995d9adbd0f85064c2e2a7ae17::server:a019f0db1cf838ea796002d4b1bc54a1 sh -s - --node-external-ip 192.168.28.100 --node-ip 192.168.28.100
+curl -sfL http://rancher-mirror.cnrancher.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.14+k3s1 INSTALL_K3S_MIRROR=cn K3S_URL=https://192.168.28.100:6443 K3S_TOKEN=K10fb4da3a53effbed27e5f5875f5505eb45a49cf995d9adbd0f85064c2e2a7ae17::server:a019f0db1cf838ea796002d4b1bc54a1 sh -s - --node-external-ip 192.168.28.100 --node-ip 192.168.28.100 --flannel-iface wg0
 ```
 
 # nfs
