@@ -179,7 +179,7 @@ source .bash_profile
 
 k3s kubectl create ns cattle-system
 
-helm install rancher rancher-latest/rancher \
+helm install rancher rancher-stable/rancher \
   --namespace cattle-system \
   --version 2.5.15 \
   --set hostname=rancher.dev.run \
