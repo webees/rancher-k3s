@@ -178,6 +178,14 @@ echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
 source .bash_profile
 
 k3s kubectl create ns cattle-system
+
+helm install rancher rancher-latest/rancher \
+  --namespace cattle-system \
+  --version 2.5.15 \
+  --set hostname=rancher.dev.run \
+  --set replicas=3
+
+#########################################################################################################
 k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/rancher/cacerts.pem
 
 # helm upgrade --install
