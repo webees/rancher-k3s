@@ -77,16 +77,17 @@ curl -s http://127.0.0.1:9100/metrics | curl --data-binary @- http://127.0.0.1:9
 ```shell
 swapoff -a
 
-# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-12/
+# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-14/
 # High Availability with Embedded DB
 curl -sfL https://get.k3s.io | sh -
+curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -
 
 # High Availability with an External DB
 curl -sfL https://get.k3s.io | sh -s - server \
    --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
 
 # INSTALL_K3S_MIRROR
-curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.14+k3s1 INSTALL_K3S_MIRROR=cn sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
+curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
 ```
 
 ```shell
@@ -182,7 +183,7 @@ k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/ranch
 # helm upgrade --install
 helm install rancher rancher-stable/rancher \
   --namespace cattle-system \
-  --version 2.5.12 \
+  --version 2.5.15 \
   --set hostname=rancher.dev.run \
   --set ingress.tls.source=secret \
   --set tls=external \
