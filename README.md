@@ -1,3 +1,91 @@
+
+# k3s
+
+```shell
+swapoff -a
+
+# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-16/
+# High Availability with Embedded DB
+curl -sfL https://get.k3s.io | sh -
+curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -
+
+# High Availability with an External DB
+curl -sfL https://get.k3s.io | sh -s - server \
+   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
+
+# INSTALL_K3S_MIRROR
+curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
+```
+
+```shell
+cat << EOF > /etc/rancher/k3s/registries.yaml
+mirrors:
+  docker.io:
+    endpoint:
+      - "https://docker.mirrors.ustc.edu.cn" 
+EOF
+```
+
+```shell
+systemctl restart k3s
+systemctl status k3s
+k3s kubectl get nodes
+k3s kubectl get pods -A
+k3s kubectl get svc -A
+k3s kubectl delete pod --grace-period=0 --force --namespace $namespace $name
+crictl ps
+crictl info
+```
+
+```
+/usr/local/bin/k3s-uninstall.sh
+/usr/local/bin/k3s-agent-uninstall.sh
+```
+
+# rancher
+
+```shell
+1$ helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+
+2$ helm repo add rancher-stable http://rancher-mirror.oss-cn-beijing.aliyuncs.com/server-charts/stable
+
+3$ helm repo add rancher-stable http://rancher-mirror.cnrancher.com/server-charts/stable
+
+helm repo update
+
+echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
+source .bash_profile
+
+k3s kubectl create ns cattle-system
+
+helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --version 2.5.16 \
+  --set hostname=rancher.dev.run \
+  --set replicas=3
+
+#########################################################################################################
+k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/rancher/cacerts.pem
+
+# helm upgrade --install
+helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --version 2.5.16 \
+  --set hostname=rancher.dev.run \
+  --set ingress.tls.source=secret \
+  --set tls=external \
+  --set privateCA=true
+
+k3s kubectl -n cattle-system rollout status deploy/rancher
+k3s kubectl -n cattle-system get deploy rancher
+k3s kubectl -n cattle-system get pods
+```
+
+- reset-password
+```
+k3s kubectl --kubeconfig $KUBECONFIG -n cattle-system exec $(k3s kubectl --kubeconfig $KUBECONFIG -n cattle-system get pods -l app=rancher | grep '1/1' | head -1 | awk '{ print $1 }') -- reset-password
+```
+
 # WireGuard 
 ```
 https://github.com/linuxserver/docker-wireguard
@@ -72,49 +160,6 @@ apt install prometheus-node-exporter
 curl -s http://127.0.0.1:9100/metrics | curl --data-binary @- http://127.0.0.1:9091/metrics/job/node/instance/"192.168.1.2:9100"
 ```
 
-# k3s
-
-```shell
-swapoff -a
-
-# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-14/
-# High Availability with Embedded DB
-curl -sfL https://get.k3s.io | sh -
-curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -
-
-# High Availability with an External DB
-curl -sfL https://get.k3s.io | sh -s - server \
-   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
-
-# INSTALL_K3S_MIRROR
-curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
-```
-
-```shell
-cat << EOF > /etc/rancher/k3s/registries.yaml
-mirrors:
-  docker.io:
-    endpoint:
-      - "https://docker.mirrors.ustc.edu.cn" 
-EOF
-```
-
-```shell
-systemctl restart k3s
-systemctl status k3s
-k3s kubectl get nodes
-k3s kubectl get pods -A
-k3s kubectl get svc -A
-k3s kubectl delete pod --grace-period=0 --force --namespace $namespace $name
-crictl ps
-crictl info
-```
-
-```
-/usr/local/bin/k3s-uninstall.sh
-/usr/local/bin/k3s-agent-uninstall.sh
-```
-
 # node
 
 ```shell
@@ -160,51 +205,6 @@ helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
   --version v1.5.1
-```
-
-
-# rancher
-
-```shell
-1$ helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-
-2$ helm repo add rancher-stable http://rancher-mirror.oss-cn-beijing.aliyuncs.com/server-charts/stable
-
-3$ helm repo add rancher-stable http://rancher-mirror.cnrancher.com/server-charts/stable
-
-helm repo update
-
-echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
-source .bash_profile
-
-k3s kubectl create ns cattle-system
-
-helm install rancher rancher-stable/rancher \
-  --namespace cattle-system \
-  --version 2.5.14 \
-  --set hostname=rancher.dev.run \
-  --set replicas=3
-
-#########################################################################################################
-k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/rancher/cacerts.pem
-
-# helm upgrade --install
-helm install rancher rancher-stable/rancher \
-  --namespace cattle-system \
-  --version 2.5.14 \
-  --set hostname=rancher.dev.run \
-  --set ingress.tls.source=secret \
-  --set tls=external \
-  --set privateCA=true
-
-k3s kubectl -n cattle-system rollout status deploy/rancher
-k3s kubectl -n cattle-system get deploy rancher
-k3s kubectl -n cattle-system get pods
-```
-
-- reset-password
-```
-k3s kubectl --kubeconfig $KUBECONFIG -n cattle-system exec $(k3s kubectl --kubeconfig $KUBECONFIG -n cattle-system get pods -l app=rancher | grep '1/1' | head -1 | awk '{ print $1 }') -- reset-password
 ```
 
 # gitlab-runner
