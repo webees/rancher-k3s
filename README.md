@@ -2,8 +2,6 @@
 # k3s
 
 ```shell
-swapoff -a
-
 # https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-16/
 # High Availability with Embedded DB
 curl -sfL https://get.k3s.io | sh -
