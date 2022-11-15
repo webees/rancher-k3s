@@ -12,7 +12,7 @@ curl -sfL https://get.k3s.io | sh -s - server \
    --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
 
 # WireGuard
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip SERVER_PUBLIC_IP --advertise-address NM_NODE_IP --node-ip NM_NODE_IP --flannel-iface wg0
 ```
 
 ```shell
