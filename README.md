@@ -7,14 +7,14 @@ swapoff -a
 # https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-16/
 # High Availability with Embedded DB
 curl -sfL https://get.k3s.io | sh -
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 sh -
 
 # High Availability with an External DB
 curl -sfL https://get.k3s.io | sh -s - server \
    --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
 
-# INSTALL_K3S_MIRROR
-curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
+# WireGuard
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 sh -s - --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' --node-external-ip 10.10.10.1 --advertise-address  10.10.10.1 --node-ip 10.10.10.1 --flannel-iface wg0
 ```
 
 ```shell
@@ -40,6 +40,23 @@ crictl info
 ```
 /usr/local/bin/k3s-uninstall.sh
 /usr/local/bin/k3s-agent-uninstall.sh
+```
+
+# helm3
+
+```shell
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+helm version
+```
+
+```
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.1/cert-manager.crds.yaml
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.5.1
 ```
 
 # rancher
@@ -187,24 +204,6 @@ sudo apt update
 sudo apt install nfs-common
 sudo mkdir -p /nfs
 sudo mount 192.168.1.2:/nfs /nfs
-```
-
-# helm3
-
-```shell
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-helm version
-```
-
-
-```
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.1/cert-manager.crds.yaml
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-helm install cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.5.1
 ```
 
 # traefik2
