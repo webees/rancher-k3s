@@ -62,12 +62,7 @@ helm install cert-manager jetstack/cert-manager \
 # rancher
 
 ```shell
-1$ helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-
-2$ helm repo add rancher-stable http://rancher-mirror.oss-cn-beijing.aliyuncs.com/server-charts/stable
-
-3$ helm repo add rancher-stable http://rancher-mirror.cnrancher.com/server-charts/stable
-
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo update
 
 echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
