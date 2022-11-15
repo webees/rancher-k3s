@@ -49,6 +49,7 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 helm version
 ```
 
+# cert-manager
 ```
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.1/cert-manager.crds.yaml
 helm repo add jetstack https://charts.jetstack.io
