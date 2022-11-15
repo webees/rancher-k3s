@@ -7,7 +7,7 @@ swapoff -a
 # https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-16/
 # High Availability with Embedded DB
 curl -sfL https://get.k3s.io | sh -
-curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn sh -
 
 # High Availability with an External DB
 curl -sfL https://get.k3s.io | sh -s - server \
