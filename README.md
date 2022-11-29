@@ -25,6 +25,15 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 sh -s - --kubel
 
 echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
 source .bash_profile
+
+sudo iptables -P INPUT ACCEPT
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -P OUTPUT ACCEPT
+sudo iptables -F -t nat
+sudo iptables -F -t mangle
+sudo iptables -F
+sudo iptables -X
+sudo iptables -X -t nat
 ```
 
 ```shell
