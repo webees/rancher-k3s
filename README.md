@@ -1,47 +1,62 @@
+# mysql
+```shell
+mkdir -p /app/k3s/mysql
 
-# netclient
+cd /app/k3s/mysql
+```
 
 ```shell
-curl -sL 'https://apt.netmaker.org/gpg.key' | sudo tee /etc/apt/trusted.gpg.d/netclient.asc
-curl -sL 'https://apt.netmaker.org/debian.deb.txt' | sudo tee /etc/apt/sources.list.d/netclient.list
-sudo apt update
-sudo apt install netclient
+cat << EOF > /app/k3s/mysql/my.cnf
+[mysqld]
+skip_host_cache
+explicit_defaults_for_timestamp = true
+
+bind-address = 0.0.0.0
+skip-name-resolve
+EOF
+```
+
+```shell
+cat << EOF > /app/k3s/mysql/compose.yaml
+version: '3.5'
+services:
+  mysql:
+    restart: always
+    container_name: k3s_mysql
+    image: mysql:8
+    ports:
+      - 3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_DATABASE: "k3s"
+      MYSQL_USER: "k3s"
+      MYSQL_PASSWORD: "TWc0XCfLRG7F3o381WleEuBgZDDN1F"
+      MYSQL_ROOT_PASSWORD: "j3aQnsLQJdtBEZtZX7W6r6Wa4wiyFU"
+    healthcheck:
+      test: mysqladmin ping -h localhost
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+EOF
 ```
 
 # k3s
-
 ```shell
-# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-5-16/
-# High Availability with Embedded DB
-curl -sfL https://get.k3s.io | sh -
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.20.15+k3s1 sh -
-
 # High Availability with an External DB
-curl -sfL https://get.k3s.io | sh -s - server \
-   --datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database"
-
-# netmaker
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
+--datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database" \
 --kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' \
---kube-apiserver-arg service-node-port-range=1-65535 \
---write-kubeconfig-mode 644 \
 --node-external-ip      XX.XX.XX.XX \
 --node-ip               XX.XX.XX.XX \
 --advertise-address     XX.XX.XX.XX \
 --flannel-backend       host-gw \
---flannel-iface         nm-netmaker
+--flannel-iface         tailscale0
 
 echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
-source .bash_profile
-
-sudo iptables -P INPUT ACCEPT
-sudo iptables -P FORWARD ACCEPT
-sudo iptables -P OUTPUT ACCEPT
-sudo iptables -F -t nat
-sudo iptables -F -t mangle
-sudo iptables -F
-sudo iptables -X
-sudo iptables -X -t nat
+source ~/.bash_profile
 ```
 
 ```shell
@@ -53,8 +68,52 @@ mirrors:
 EOF
 ```
 
-# k3s-node
+# helm3
+```shell
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+helm version
+```
 
+# cert-manager
+```shell
+# If you have installed the CRDs manually instead of with the `--set installCRDs=true` option added to your Helm install command, you should upgrade your CRD resources before upgrading the Helm chart:
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.crds.yaml
+
+# Add the Jetstack Helm repository
+helm repo add jetstack https://charts.jetstack.io
+
+# Update your local Helm chart repository cache
+helm repo update
+
+# Install the cert-manager Helm chart
+helm install cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.7.1
+```
+
+# rancher
+```shell
+# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-0/
+
+helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+helm repo update
+
+k3s kubectl create ns cattle-system
+
+helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --version 2.7.0 \
+  --set hostname=rancher.dev.run \
+  --set replicas=3
+```
+
+# reset-password
+```shell
+kubectl --kubeconfig $KUBECONFIG -n cattle-system exec $(kubectl --kubeconfig $KUBECONFIG -n cattle-system get pods -l app=rancher --no-headers | head -1 | awk '{ print $1 }') -c rancher -- reset-password
+```
+
+# k3s-node
 ```shell
 cat /var/lib/rancher/k3s/server/node-token
 
@@ -81,142 +140,13 @@ crictl ps
 crictl info
 ```
 
-```
+```shell
 /usr/local/bin/k3s-uninstall.sh
 /usr/local/bin/k3s-agent-uninstall.sh
 ```
 
-# helm3
-
-```shell
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-helm version
-```
-
-# cert-manager
-```
-kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.5.1/cert-manager.crds.yaml
-helm repo add jetstack https://charts.jetstack.io
-helm repo update
-helm install cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.5.1
-```
-
-```
-# If you have installed the CRDs manually instead of with the `--set installCRDs=true` option added to your Helm install command, you should upgrade your CRD resources before upgrading the Helm chart:
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.crds.yaml
-
-# Add the Jetstack Helm repository
-helm repo add jetstack https://charts.jetstack.io
-
-# Update your local Helm chart repository cache
-helm repo update
-
-# Install the cert-manager Helm chart
-helm install cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --create-namespace \
-  --version v1.7.1
-```
-
-# rancher
-
-```shell
-helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-helm repo update
-
-k3s kubectl create ns cattle-system
-
-helm install rancher rancher-stable/rancher \
-  --namespace cattle-system \
-  --version 2.5.16 \
-  --set hostname=rancher.dev.run \
-  --set replicas=3
-
-#########################################################################################################
-k3s kubectl -n cattle-system create secret generic tls-ca --from-file=/etc/rancher/cacerts.pem
-
-# helm upgrade --install
-helm install rancher rancher-stable/rancher \
-  --namespace cattle-system \
-  --version 2.5.16 \
-  --set hostname=rancher.dev.run \
-  --set ingress.tls.source=secret \
-  --set tls=external \
-  --set privateCA=true
-
-k3s kubectl -n cattle-system rollout status deploy/rancher
-k3s kubectl -n cattle-system get deploy rancher
-k3s kubectl -n cattle-system get pods
-```
-
-- reset-password
-```
-kubectl --kubeconfig $KUBECONFIG -n cattle-system exec $(kubectl --kubeconfig $KUBECONFIG -n cattle-system get pods -l app=rancher --no-headers | head -1 | awk '{ print $1 }') -c rancher -- reset-password
-```
-
-# WireGuard 
-```
-https://github.com/linuxserver/docker-wireguard
-
-
-docker run -d \
-  --name=wireguard \
-  --cap-add=NET_ADMIN \
-  --cap-add=SYS_MODULE \
-  -e PUID=1000 \
-  -e PGID=1000 \
-  -e TZ=Asia/Shanghai \
-  -e SERVERURL=0.0.0.0 \
-  -e SERVERPORT=51820 \
-  -e PEERS=2 \
-  -e PEERDNS=auto \
-  -e INTERNAL_SUBNET=10.10.10.0 \
-  -e ALLOWEDIPS=10.10.10.1/24 \
-  -v /root/.wireguard/config:/config \
-  -v /lib/modules:/lib/modules \
-  --net=host \
-  --restart unless-stopped \
-  linuxserver/wireguard
-
-
-
-docker run -d \
-  --name=wireguard \
-  --cap-add=NET_ADMIN \
-  --cap-add=SYS_MODULE \
-  -e PUID=1000 \
-  -e PGID=1000 \
-  -e TZ=Asia/Shanghai \
-  -v /root/.wireguard/config:/config \
-  -v /lib/modules:/lib/modules \
-  --net=host \
-  --restart unless-stopped \
-  linuxserver/wireguard
-```
-
-
-# docker-compose
-```
-version: '3'
-services:
-  rancher:
-    image: 'rancher/rancher:v2.5.12-rc1'
-    privileged: true
-    restart: unless-stopped
-    network_mode: host
-    volumes:
-      - ./data:/var/lib/rancher
-      - /run/shm/rancher/auditlog:/var/log/auditlog
-    environment:
-      - TZ=Asia/Shanghai
-```
-
 # ansible
-
-```
+```shell
 sudo apt update
 sudo apt install software-properties-common
 sudo add-apt-repository --yes --update ppa:ansible/ansible
@@ -224,15 +154,13 @@ sudo apt install ansible
 ```
 
 # prometheus
-
 ```shell
 apt install prometheus-node-exporter
 
 curl -s http://127.0.0.1:9100/metrics | curl --data-binary @- http://127.0.0.1:9091/metrics/job/node/instance/"192.168.1.2:9100"
 ```
 
-# nfs
-
+# nfs-server
 ```shell
 # server
 sudo apt-get update
@@ -248,24 +176,4 @@ sudo apt update
 sudo apt install nfs-common
 sudo mkdir -p /nfs
 sudo mount 192.168.1.2:/nfs /nfs
-```
-
-# traefik2
-
-```shell
-# Execute before k3s installation
-mkdir -p /var/lib/rancher/k3s/server/manifests
-
-cat << EOF > /var/lib/rancher/k3s/server/manifests/traefik.yml
-apiVersion: helm.cattle.io/v1
-kind: HelmChart
-metadata:
-  name: traefik
-  namespace: kube-system
-spec:
-  chart: traefik
-  repo: https://containous.github.io/traefik-helm-chart
-  set:
-    image.tag: "2.2.1"  
-EOF
 ```
