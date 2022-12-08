@@ -160,7 +160,7 @@ apt install prometheus-node-exporter
 curl -s http://127.0.0.1:9100/metrics | curl --data-binary @- http://127.0.0.1:9091/metrics/job/node/instance/"192.168.1.2:9100"
 ```
 
-# nfs-server
+# nfs
 ```shell
 # server
 sudo apt-get update
