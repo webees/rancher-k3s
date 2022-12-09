@@ -101,7 +101,7 @@ helm repo update
 
 k3s kubectl create ns cattle-system
 
-helm install rancher rancher-stable/rancher \
+helm upgrade --install rancher rancher-stable/rancher \
   --namespace cattle-system \
   --version 2.7.0 \
   --set hostname=rancher.dev.run \
