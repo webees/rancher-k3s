@@ -56,6 +56,7 @@ curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
 --flannel-iface         tailscale0
 
 echo "export KUBECONFIG=/etc/rancher/k3s/k3s.yaml" >> ~/.bash_profile
+echo "export K3S_RESOLV_CONF=/etc/resolv.conf" >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
