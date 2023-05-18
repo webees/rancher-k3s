@@ -26,7 +26,7 @@ cat << EOF > /etc/rancher/k3s/registries.yaml
 mirrors:
   docker.io:
     endpoint:
-      - "https://mirrors.docker.io" 
+      - "https://demo.mirrors.io" # Docker registry mirror
 EOF
 ```
 
