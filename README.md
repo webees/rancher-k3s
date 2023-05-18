@@ -10,9 +10,9 @@ helm version
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
 --datastore-endpoint="postgresql://xxxxxxxx:xxxxxxxxxxxxxxxx@db.bit.io:5432/xxxxxxxx.rancher" \
 --kubelet-arg='eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
---node-external-ip      XX.XX.XX.XX \
---node-ip               XX.XX.XX.XX \
---advertise-address     XX.XX.XX.XX \
+--node-external-ip      XX.XX.XX.XX \ # IPv4/IPv6 external IP addresses to advertise for node
+--node-ip               XX.XX.XX.XX \ # IPv4/IPv6 addresses to advertise for node
+--advertise-address     XX.XX.XX.XX \ # IPv4 address that apiserver uses to advertise to members of the cluster (default: node-external-ip/node-ip)
 --flannel-backend       host-gw \
 --flannel-iface         tailscale0
 
