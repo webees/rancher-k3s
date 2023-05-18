@@ -1,3 +1,11 @@
+# [tailscale](https://github.com/webees/headscale)
+```shell
+chmod o+r /usr/share/keyrings/tailscale-archive-keyring.gpg
+curl -fsSL https://tailscale.com/install.sh | sh
+
+tailscale up --login-server https://${server_url} --auth-key ${authkey} --force-reauth
+```
+
 # helm3
 ```shell
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
@@ -7,8 +15,8 @@ helm version
 # k3s
 ```shell
 # High Availability with an External DB
-curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
---datastore-endpoint="postgresql://xxxxxxxx:xxxxxxxxxxxxxxxx@db.bit.io:5432/xxxxxxxx.rancher" \
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.25 sh -s - \
+--datastore-endpoint="postgres://xxxxxxxx:xxxxxxxxxxxxxxxx@db.bit.io:5432/xxxxxxxx.rancher" \
 --kubelet-arg='eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
 --node-external-ip      XX.XX.XX.XX \ # IPv4/IPv6 external IP addresses to advertise for node
 --node-ip               XX.XX.XX.XX \ # IPv4/IPv6 addresses to advertise for node
@@ -26,7 +34,7 @@ cat << EOF > /etc/rancher/k3s/registries.yaml
 mirrors:
   docker.io:
     endpoint:
-      - "https://demo.mirrors.io" # Docker registry mirror
+      - "[https://demo.mirrors.io](https://<my-docker-mirror-host>)"
 EOF
 ```
 
@@ -50,7 +58,7 @@ helm install cert-manager jetstack/cert-manager \
 
 # rancher
 ```shell
-# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-0/
+# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-3
 
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo update
