@@ -1,54 +1,15 @@
-# mysql
+# helm3
 ```shell
-mkdir -p /app/k3s/mysql
-
-cd /app/k3s/mysql
-```
-
-```shell
-cat << EOF > /app/k3s/mysql/my.cnf
-[mysqld]
-skip_host_cache
-explicit_defaults_for_timestamp = true
-
-bind-address = 0.0.0.0
-skip-name-resolve
-EOF
-```
-
-```shell
-cat << EOF > /app/k3s/mysql/compose.yaml
-version: '3.5'
-services:
-  mysql:
-    restart: always
-    container_name: k3s_mysql
-    image: mysql:8
-    ports:
-      - 3306
-    volumes:
-      - ./mysql:/var/lib/mysql
-      - ./my.cnf:/etc/mysql/conf.d/my.cnf
-    environment:
-      MYSQL_DATABASE: "k3s"
-      MYSQL_USER: "k3s"
-      MYSQL_PASSWORD: "TWc0XCfLRG7F3o381WleEuBgZDDN1F"
-      MYSQL_ROOT_PASSWORD: "j3aQnsLQJdtBEZtZX7W6r6Wa4wiyFU"
-    healthcheck:
-      test: mysqladmin ping -h localhost
-      interval: 10s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
-EOF
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+helm version
 ```
 
 # k3s
 ```shell
 # High Availability with an External DB
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
---datastore-endpoint="mysql://username:password@tcp(hostname:3306)/database" \
---kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' \
+--datastore-endpoint="postgresql://xxxxxxxx:xxxxxxxxxxxxxxxx@db.bit.io:5432/xxxxxxxx.rancher" \
+--kubelet-arg='eviction-hard=memory.available<1Mi,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
 --node-external-ip      XX.XX.XX.XX \
 --node-ip               XX.XX.XX.XX \
 --advertise-address     XX.XX.XX.XX \
@@ -67,12 +28,6 @@ mirrors:
     endpoint:
       - "https://docker.mirrors.ustc.edu.cn" 
 EOF
-```
-
-# helm3
-```shell
-curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-helm version
 ```
 
 # cert-manager
