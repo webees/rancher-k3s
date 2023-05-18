@@ -9,7 +9,7 @@ helm version
 # High Availability with an External DB
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
 --datastore-endpoint="postgresql://xxxxxxxx:xxxxxxxxxxxxxxxx@db.bit.io:5432/xxxxxxxx.rancher" \
---kubelet-arg='eviction-hard=memory.available<1Mi,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
+--kubelet-arg='eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
 --node-external-ip      XX.XX.XX.XX \
 --node-ip               XX.XX.XX.XX \
 --advertise-address     XX.XX.XX.XX \
@@ -26,7 +26,7 @@ cat << EOF > /etc/rancher/k3s/registries.yaml
 mirrors:
   docker.io:
     endpoint:
-      - "https://docker.mirrors.ustc.edu.cn" 
+      - "https://mirrors.docker.io" 
 EOF
 ```
 
