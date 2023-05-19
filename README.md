@@ -41,7 +41,7 @@ EOF
 # cert-manager
 ```shell
 # If you have installed the CRDs manually instead of with the `--set installCRDs=true` option added to your Helm install command, you should upgrade your CRD resources before upgrading the Helm chart:
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.crds.yaml
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.11.0/cert-manager.crds.yaml
 
 # Add the Jetstack Helm repository
 helm repo add jetstack https://charts.jetstack.io
@@ -53,13 +53,12 @@ helm repo update
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.7.1
+  --version v1.11.0
 ```
 
 # rancher
 ```shell
 # https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-3
-
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo update
 
@@ -69,8 +68,50 @@ helm upgrade --install rancher rancher-stable/rancher \
   --namespace cattle-system \
   --version 2.7.0 \
   --set hostname=rancher.dev.run \
-  --set replicas=3
+  --set replicas=1 \
+  --set global.cattle.psp.enabled=false
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # reset-password
 ```shell
