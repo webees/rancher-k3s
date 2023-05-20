@@ -1,4 +1,7 @@
-# [tailscale](https://github.com/webees/headscale)
+# headscale
+https://github.com/webees/headscale
+
+# tailscale
 ```shell
 curl -fsSL https://tailscale.com/install.sh | sh
 
