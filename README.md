@@ -1,6 +1,5 @@
 # [tailscale](https://github.com/webees/headscale)
 ```shell
-chmod o+r /usr/share/keyrings/tailscale-archive-keyring.gpg
 curl -fsSL https://tailscale.com/install.sh | sh
 
 tailscale up --login-server https://${server_url} --auth-key ${authkey} --force-reauth
@@ -16,7 +15,7 @@ helm version
 ```shell
 # High Availability with an External DB
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.25 sh -s - \
---datastore-endpoint="postgres://xxxxxxxx:xxxxxxxxxxxxxxxx@db.bit.io:5432/xxxxxxxx.rancher" \
+--datastore-endpoint="postgres://xxxxxxxx:xxxxxxxxxxxxxxxx@ep-polished-meadow-xxxxxxxx.us-west-2.aws.neon.tech/k3s?options=endpoint=ep-polished-meadow-xxxxxxxx" \
 --kubelet-arg='eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
 --node-external-ip      XX.XX.XX.XX \ # IPv4/IPv6 external IP addresses to advertise for node
 --node-ip               XX.XX.XX.XX \ # IPv4/IPv6 addresses to advertise for node
@@ -36,6 +35,21 @@ mirrors:
     endpoint:
       - "[https://demo.mirrors.io](https://<my-docker-mirror-host>)"
 EOF
+```
+
+```shell
+# some commands
+k3s kubectl get nodes
+k3s kubectl get pods -A
+k3s kubectl get svc -A
+k3s kubectl delete pod --grace-period=0 --force --namespace $namespace $name
+crictl ps
+crictl info
+```
+
+```shell
+# uninstall
+/usr/local/bin/k3s-uninstall.sh
 ```
 
 # cert-manager
@@ -72,49 +86,11 @@ helm upgrade --install rancher rancher-stable/rancher \
   --set global.cattle.psp.enabled=false
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```shell
+# bootstrap
+echo https://rancher.dev.run/dashboard/?setup=$(kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}')
 
 # reset-password
-```shell
 kubectl --kubeconfig $KUBECONFIG -n cattle-system exec $(kubectl --kubeconfig $KUBECONFIG -n cattle-system get pods -l app=rancher --no-headers | head -1 | awk '{ print $1 }') -c rancher -- reset-password
 ```
 
@@ -135,8 +111,68 @@ INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
 ```
 
 ```shell
-systemctl restart k3s
-systemctl status k3s
+# uninstall
+/usr/local/bin/k3s-agent-uninstall.sh
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# k3s-node
+```shell
+cat /var/lib/rancher/k3s/server/node-token
+
+curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh | INSTALL_K3S_VERSION=v1.20.15+k3s1 INSTALL_K3S_MIRROR=cn K3S_URL=https://192.168.28.100:6443 K3S_TOKEN=K10fb4da3a53effbed27e5f5875f5505eb45a49cf995d9adbd0f85064c2e2a7ae17::server:a019f0db1cf838ea796002d4b1bc54a1 sh -
+
+curl -sfL https://get.k3s.io | \
+K3S_URL=https://XX.XX.XX.XX:6443 \
+K3S_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXX \
+INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
+--kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' \
+--node-external-ip XX.XX.XX.XX \
+--node-ip          XX.XX.XX.XX \
+--flannel-iface    nm-netmaker
+```
+
+```shell
 k3s kubectl get nodes
 k3s kubectl get pods -A
 k3s kubectl get svc -A
@@ -145,10 +181,6 @@ crictl ps
 crictl info
 ```
 
-```shell
-/usr/local/bin/k3s-uninstall.sh
-/usr/local/bin/k3s-agent-uninstall.sh
-```
 
 # ansible
 ```shell
