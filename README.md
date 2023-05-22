@@ -106,8 +106,8 @@ curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh 
 curl -sfL https://get.k3s.io | \
 K3S_URL=https://XX.XX.XX.XX:6443 \
 K3S_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXX \
-INSTALL_K3S_VERSION=v1.24.8+k3s1 sh -s - \
---kubelet-arg='eviction-hard=memory.available<100Mi,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%' \
+INSTALL_K3S_VERSION=v1.25.9+k3s1 sh -s - \
+--kubelet-arg='eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
 --node-external-ip XX.XX.XX.XX \
 --node-ip          XX.XX.XX.XX \
 --flannel-iface    nm-netmaker
