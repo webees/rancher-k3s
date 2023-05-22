@@ -110,7 +110,7 @@ INSTALL_K3S_VERSION=v1.25.9+k3s1 sh -s - \
 --kubelet-arg='eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%' \
 --node-external-ip XX.XX.XX.XX \
 --node-ip          XX.XX.XX.XX \
---flannel-iface    nm-netmaker
+--flannel-iface    tailscale0
 ```
 
 ```shell
