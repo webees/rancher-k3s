@@ -111,7 +111,7 @@ helm upgrade --install rancher rancher-stable/rancher \
   --version 2.7.0 \
   --set hostname=rancher.dev.run \
   --set replicas=1 \
-  --set global.cattle.psp.enabled=false
+  --set global.cattle.psp.enabled=false # For Kubernetes v1.25 or later, set global.cattle.psp.enabled to false.
 ```
 
 ```shell
