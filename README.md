@@ -16,6 +16,7 @@ ip a
 https://github.com/webees/headscale
 
 # tailscale
+https://tailscale.com/kb/
 ```shell
 curl -fsSL https://tailscale.com/install.sh | sh
 
