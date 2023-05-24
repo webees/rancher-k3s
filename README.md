@@ -1,3 +1,17 @@
+# disable ipv6
+
+```shell
+echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.all.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.default.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.lo.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
+tail -5 /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+sysctl -p
+ip a
+```
+
 # headscale
 https://github.com/webees/headscale
 
@@ -14,7 +28,7 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 helm version
 ```
 
-# k3s
+# k3s server
 ```shell
 # High Availability with an External DB
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.25 sh -s - \
@@ -62,7 +76,9 @@ crictl info
 /usr/local/bin/k3s-uninstall.sh
 ```
 
-# k3s-node
+# k3s agent
+Copy ```/etc/rancher/k3s/k3s.yaml``` on your machine located outside the cluster as ```~/.kube/config```. Then replace the value of the ```server``` field with the IP or name of your K3s server. ```kubectl``` can now manage your K3s cluster.
+
 ```shell
 curl -sfL https://get.k3s.io | \
 K3S_URL=https://XX.XX.XX.XX:6443 \
@@ -104,11 +120,10 @@ helm install cert-manager jetstack/cert-manager \
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo update
 
-k3s kubectl create ns cattle-system
-
 helm upgrade --install rancher rancher-stable/rancher \
   --namespace cattle-system \
-  --version 2.7.0 \
+  --create-namespace \
+  --version 2.7.3 \
   --set hostname=rancher.dev.run \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false # For Kubernetes v1.25 or later, set global.cattle.psp.enabled to false.
