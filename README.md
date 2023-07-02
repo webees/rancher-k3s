@@ -63,6 +63,7 @@ EOF
 
 ```shell
 # some commands
+/usr/local/bin/k3s-killall.sh
 k3s kubectl describe nodes
 k3s kubectl get nodes
 k3s kubectl get pods -A
