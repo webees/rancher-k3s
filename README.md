@@ -72,6 +72,7 @@ kubectl get nodes
 kubectl get pods -A
 kubectl get svc -A
 kubectl delete pod --grace-period=0 --force --namespace $namespace $name
+kubectl get deployment -n $namespace $name -o yaml
 crictl ps
 crictl info
 ```
