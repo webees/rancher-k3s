@@ -64,8 +64,9 @@ EOF
 ```shell
 # some commands
 /usr/local/bin/k3s-killall.sh
-kubectl get apiservice
 kubectl describe nodes
+kubectl get apiservice
+kubectl get componentstatus
 kubectl get nodes
 kubectl get pods -A
 kubectl get svc -A
