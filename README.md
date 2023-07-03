@@ -64,11 +64,12 @@ EOF
 ```shell
 # some commands
 /usr/local/bin/k3s-killall.sh
-k3s kubectl describe nodes
-k3s kubectl get nodes
-k3s kubectl get pods -A
-k3s kubectl get svc -A
-k3s kubectl delete pod --grace-period=0 --force --namespace $namespace $name
+kubectl get apiservice
+kubectl describe nodes
+kubectl get nodes
+kubectl get pods -A
+kubectl get svc -A
+kubectl delete pod --grace-period=0 --force --namespace $namespace $name
 crictl ps
 crictl info
 ```
