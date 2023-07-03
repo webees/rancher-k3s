@@ -70,6 +70,7 @@ kubectl get apiservice
 kubectl get componentstatus
 kubectl get nodes
 kubectl get pods -A
+kubectl get pods --all-namespaces -o wide
 kubectl get svc -A
 kubectl delete pod --grace-period=0 --force --namespace $namespace $name
 kubectl get deployment -n $namespace $name -o yaml
