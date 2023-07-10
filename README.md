@@ -65,6 +65,7 @@ EOF
 ```shell
 # some commands
 /usr/local/bin/k3s-killall.sh
+journalctl -u k3s -f
 kubectl describe nodes
 kubectl get apiservice
 kubectl get componentstatus
@@ -76,6 +77,10 @@ kubectl get svc -A
 kubectl delete pod --grace-period=0 --force --namespace $namespace $name
 kubectl get deployment -n $namespace $name -o yaml
 kubectl scale deployment --all --replicas=0 -n $namespace
+
+kubectl delete namespace $namespace
+kubectl delete pods --all -n $namespace
+
 crictl ps
 crictl info
 ```
