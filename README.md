@@ -36,7 +36,7 @@ curl -sfL https://get.k3s.io | \
 INSTALL_K3S_VERSION=v1.25.11+k3s1 sh -s - \
 --datastore-endpoint "postgres://xxxxxxxx:xxxxxxxxxxxxxxxx@ep-polished-meadow-xxxxxxxx.us-west-2.aws.neon.tech/k3s?options=endpoint=ep-polished-meadow-xxxxxxxx" \
 --kubelet-arg        "eviction-hard=memory.available<0.1%,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%" \
---kube-proxy-arg     "proxy-mode=ipvs" \
+--kube-proxy-arg     "ipvs-scheduler=lc,proxy-mode=ipvs" \
 --node-external-ip   XX.XX.XX.XX \ # IPv4/IPv6 external IP addresses to advertise for node
 --node-ip            XX.XX.XX.XX \ # IPv4/IPv6 addresses to advertise for node
 --advertise-address  XX.XX.XX.XX \ # IPv4 address that apiserver uses to advertise to members of the cluster (default: node-external-ip/node-ip)
@@ -99,7 +99,7 @@ K3S_URL=https://XX.XX.XX.XX:6443 \
 K3S_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXX \
 INSTALL_K3S_VERSION=v1.25.11+k3s1 sh -s - \
 --kubelet-arg      "eviction-hard=memory.available<0.1%,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%" \
---kube-proxy-arg   "proxy-mode=ipvs" \
+--kube-proxy-arg   "ipvs-scheduler=lc,proxy-mode=ipvs" \
 --node-external-ip XX.XX.XX.XX \
 --node-ip          XX.XX.XX.XX \
 --flannel-iface    tailscale0
