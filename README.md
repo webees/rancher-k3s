@@ -130,14 +130,14 @@ helm install cert-manager jetstack/cert-manager \
 
 # rancher
 ```shell
-# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-3
+# https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-5
 helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 helm repo update
 
 helm upgrade --install rancher rancher-stable/rancher \
   --namespace cattle-system \
   --create-namespace \
-  --version 2.7.4 \
+  --version 2.7.5 \
   --set hostname=rancher.dev.run \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false # For Kubernetes v1.25 or later, set global.cattle.psp.enabled to false.
