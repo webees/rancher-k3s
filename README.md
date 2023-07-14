@@ -100,7 +100,6 @@ K3S_URL=https://XX.XX.XX.XX:6443 \
 K3S_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXX \
 INSTALL_K3S_VERSION=v1.26.6+k3s1 sh -s - \
 --kubelet-arg        "eviction-hard=memory.available<0.1%,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%" \
---kube-apiserver-arg "service-node-port-range=1-65535" \
 --kube-proxy-arg     "ipvs-scheduler=lc,proxy-mode=ipvs" \
 --node-external-ip   XX.XX.XX.XX \
 --node-ip            XX.XX.XX.XX \
