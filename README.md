@@ -23,6 +23,17 @@ curl -fsSL https://tailscale.com/install.sh | sh
 tailscale up --login-server https://${server_url} --auth-key ${authkey} --force-reauth
 ```
 
+# disable 127.0.0.53
+```
+mkdir -p /etc/systemd/resolved.conf.d/
+cat >/etc/systemd/resolved.conf.d/98-disable-127-53.conf << EOF
+[Resolve]
+DNSStubListener=no
+EOF
+systemctl daemon-reload && systemctl restart systemd-resolved.service && systemctl status -l systemd-resolved.service --no-pager
+ss -tunlp
+```
+
 # helm3
 ```shell
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
