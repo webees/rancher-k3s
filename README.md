@@ -40,6 +40,7 @@ DNSStubListener=no
 EOF
 systemctl daemon-reload && systemctl restart systemd-resolved.service && systemctl status -l systemd-resolved.service --no-pager
 ss -tunlp
+cat /etc/resolv.conf
 ```
 
 # helm3
