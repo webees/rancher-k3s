@@ -1,18 +1,53 @@
 ```
 uname -r
-sudo apt-get update
-sudo apt-get upgrade
+apt-get update
+apt-get upgrade
 apt-get upgrade linux-image-generic
 ```
 
-# disable ipv6
+```
+ufw status numbered
+ufw status verbose
+ufw show added
+ufw delete 1
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 41641/udp
+ufw allow 3478/udp
+ufw enable
+ufw disable
 
+iperf3 -s -p 8888
+iperf3 -u -p 8888 -c 1.1.1.1
+```
+
+# enable ipv6
+```
+cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+
+echo 'net.ipv6.conf.all.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.default.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.lo.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
+
+tail -5 /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+sysctl -p
+ip a
+
+netplan apply
+ip -6 addr show
+
+```
+
+# disable ipv6
 ```shell
 echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
 echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
+
 echo 'net.ipv6.conf.all.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
 echo 'net.ipv6.conf.default.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
 echo 'net.ipv6.conf.lo.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
+
 tail -5 /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
 sysctl -p
