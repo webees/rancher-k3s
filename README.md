@@ -1,3 +1,10 @@
+```
+uname -r
+sudo apt-get update
+sudo apt-get upgrade
+apt-get upgrade linux-image-generic
+```
+
 # disable ipv6
 
 ```shell
