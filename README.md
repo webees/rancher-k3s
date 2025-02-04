@@ -5,7 +5,7 @@ apt-get upgrade
 apt-get upgrade linux-image-generic
 ```
 
-```
+```bash
 ufw status numbered
 ufw status verbose
 ufw show added
@@ -22,7 +22,7 @@ iperf3 -u -p 8888 -c 1.1.1.1
 ```
 
 # enable ipv6
-```
+```shell
 cat /proc/sys/net/ipv6/conf/all/disable_ipv6
 
 echo 'net.ipv6.conf.all.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
