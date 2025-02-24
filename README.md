@@ -91,6 +91,14 @@ curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bas
 helm version
 ```
 
+# Node Feature Discovery
+```
+export NFD_NS=node-feature-discovery
+helm repo add nfd https://kubernetes-sigs.github.io/node-feature-discovery/charts
+helm repo update
+helm install nfd/node-feature-discovery --namespace $NFD_NS --create-namespace --generate-name
+```
+
 # k3s server
 ```shell
 # High Availability with an External DB
