@@ -2,6 +2,36 @@
 
 The [SUSE Rancher Support Matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions) provides a **comprehensive compatibility guide** for Rancher deployments, detailing supported **Kubernetes versions**, **operating systems**, **container runtimes**, and **certified integrations** (CNI, storage, cloud). It defines **lifecycle policies**, **maintenance schedules**, and **upgrade paths**, while highlighting differences across **deployment modes**. This matrix is essential for **installation planning**, **compatibility troubleshooting**, and **upgrade strategy**, and is **regularly updated by SUSE** to ensure accuracy.
 
+# System Update and Kernel Version
+```
+uname -r
+apt-get update
+apt-get upgrade
+apt-get upgrade linux-image-generic
+```
+
+# UFW Firewall Management
+```bash
+ufw status verbose
+ufw show added
+
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 41641/udp
+ufw allow 3478/udp
+ufw enable
+
+# ufw status numbered
+# ufw delete 1
+# ufw disable
+```
+
+# Network Performance Testing with iperf3
+```
+iperf3 -s -p 8888
+iperf3 -u -p 8888 -c 1.1.1.1
+```
+
 # BBR
 ```
 echo net.core.default_qdisc=fq >> /etc/sysctl.conf
@@ -89,28 +119,6 @@ INSTALL_K3S_VERSION=v1.32.5+k3s1 sh -s - \
 
 
 
-```
-uname -r
-apt-get update
-apt-get upgrade
-apt-get upgrade linux-image-generic
-```
-
-```bash
-ufw status numbered
-ufw status verbose
-ufw show added
-ufw delete 1
-ufw allow 80/tcp
-ufw allow 443/tcp
-ufw allow 41641/udp
-ufw allow 3478/udp
-ufw enable
-ufw disable
-
-iperf3 -s -p 8888
-iperf3 -u -p 8888 -c 1.1.1.1
-```
 
 
 
@@ -189,6 +197,11 @@ kubectl delete pods --all -n $namespace
 
 crictl ps
 crictl info
+
+kubectl get nodes --no-headers \
+  | grep '^vpn-' \
+  | awk '{print $1}' \
+  | xargs -I{} kubectl taint nodes {} no-pods=deny:NoSchedule \n
 ```
 
 ```shell
