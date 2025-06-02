@@ -2,7 +2,22 @@
 
 The [SUSE Rancher Support Matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions) provides a **comprehensive compatibility guide** for Rancher deployments, detailing supported **Kubernetes versions**, **operating systems**, **container runtimes**, and **certified integrations** (CNI, storage, cloud). It defines **lifecycle policies**, **maintenance schedules**, and **upgrade paths**, while highlighting differences across **deployment modes**. This matrix is essential for **installation planning**, **compatibility troubleshooting**, and **upgrade strategy**, and is **regularly updated by SUSE** to ensure accuracy.
 
+# K3s Agent
+Copy ```/etc/rancher/k3s/k3s.yaml``` on your machine located outside the cluster as ```~/.kube/config```. Then replace the value of the ```server``` field with the IP or name of your K3s server. ```kubectl``` can now manage your K3s cluster.
 
+```shell
+curl -sfL https://get.k3s.io | \
+K3S_URL=https://XX.XX.XX.XX:6443 \
+K3S_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXX \
+INSTALL_K3S_VERSION=v1.32.5+k3s1 sh -s - \
+--kubelet-arg        "eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%" \
+--kube-proxy-arg     "ipvs-scheduler=lc,proxy-mode=ipvs" \
+--vpn-auth="name=tailscale,joinKey=XXXXXXXXXXXXXXXXXXXXXXXX"
+```
+
+```shell
+/usr/local/bin/k3s-agent-uninstall.sh
+```
 
 
 
@@ -171,25 +186,7 @@ crictl info
 /usr/local/bin/k3s-uninstall.sh
 ```
 
-# k3s agent
-Copy ```/etc/rancher/k3s/k3s.yaml``` on your machine located outside the cluster as ```~/.kube/config```. Then replace the value of the ```server``` field with the IP or name of your K3s server. ```kubectl``` can now manage your K3s cluster.
 
-```shell
-curl -sfL https://get.k3s.io | \
-K3S_URL=https://XX.XX.XX.XX:6443 \
-K3S_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXX \
-INSTALL_K3S_VERSION=v1.26.6+k3s1 sh -s - \
---kubelet-arg        "eviction-hard=memory.available<0.1%,imagefs.available<0.1%,imagefs.inodesFree<0.1%,nodefs.available<0.1%,nodefs.inodesFree<0.1%" \
---kube-proxy-arg     "ipvs-scheduler=lc,proxy-mode=ipvs" \
---node-external-ip   XX.XX.XX.XX \
---node-ip            XX.XX.XX.XX \
---flannel-iface      tailscale0
-```
-
-```shell
-# uninstall
-/usr/local/bin/k3s-agent-uninstall.sh
-```
 
 # cert-manager
 ```shell
