@@ -22,6 +22,39 @@ ss -tunlp
 cat /etc/resolv.conf
 ```
 
+# Enable IPv4 and IPv6 Forwarding Persistently
+```
+sudo sed -i '/^net\.ipv4\.ip_forward/ d'              /etc/sysctl.conf
+sudo sed -i '/^net\.ipv6\.conf\.all\.forwarding/ d'   /etc/sysctl.conf
+echo 'net.ipv4.ip_forward = 1'          | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
+
+tail -5 /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+sysctl -p
+ip a
+```
+
+# Enable IPv6
+```shell
+cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+
+sudo sed -i '/^net\.ipv6\.conf\.all\.disable_ipv6/ d'       /etc/sysctl.conf
+sudo sed -i '/^net\.ipv6\.conf\.default\.disable_ipv6/ d'   /etc/sysctl.conf
+sudo sed -i '/^net\.ipv6\.conf\.lo\.disable_ipv6/ d'        /etc/sysctl.conf
+echo 'net.ipv6.conf.all.disable_ipv6 = 0'     | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.default.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
+echo 'net.ipv6.conf.lo.disable_ipv6 = 0'      | sudo tee -a /etc/sysctl.conf
+
+tail -5 /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+sysctl -p
+ip a
+
+netplan apply
+ip -6 addr show
+```
+
 # Headscale
 https://github.com/webees/headscale
 
@@ -81,39 +114,6 @@ iperf3 -u -p 8888 -c 1.1.1.1
 
 
 
-
-# enable ipv6
-```shell
-cat /proc/sys/net/ipv6/conf/all/disable_ipv6
-
-echo 'net.ipv6.conf.all.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.default.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.lo.disable_ipv6 = 0' | sudo tee -a /etc/sysctl.conf
-
-tail -5 /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
-sysctl -p
-ip a
-
-netplan apply
-ip -6 addr show
-
-```
-
-# disable ipv6
-```shell
-echo 'net.ipv4.ip_forward = 1' | sudo tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.conf
-
-echo 'net.ipv6.conf.all.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.default.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
-echo 'net.ipv6.conf.lo.disable_ipv6 = 1' | sudo tee -a /etc/sysctl.conf
-
-tail -5 /etc/sysctl.conf
-sysctl -p /etc/sysctl.conf
-sysctl -p
-ip a
-```
 
 
 
