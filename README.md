@@ -1,3 +1,13 @@
+# SUSE Rancher Support Matrix Summary
+
+The [SUSE Rancher Support Matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions) provides a **comprehensive compatibility guide** for Rancher deployments, detailing supported **Kubernetes versions**, **operating systems**, **container runtimes**, and **certified integrations** (CNI, storage, cloud). It defines **lifecycle policies**, **maintenance schedules**, and **upgrade paths**, while highlighting differences across **deployment modes**. This matrix is essential for **installation planning**, **compatibility troubleshooting**, and **upgrade strategy**, and is **regularly updated by SUSE** to ensure accuracy.
+
+
+
+
+
+
+
 ```
 uname -r
 apt-get update
