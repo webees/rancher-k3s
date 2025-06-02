@@ -153,7 +153,7 @@ INSTALL_K3S_VERSION=v1.31.6+k3s1 sh -s - \
 --kube-proxy-arg     "ipvs-scheduler=lc,proxy-mode=ipvs" \
 --node-external-ip   "$(curl -4 -s https://ifconfig.me)" \
 --node-ip            "$(tailscale ip -4 | tr -d '\n')" \
---node-ip            "$(tailscale ip -4 | tr -d '\n')" \
+--advertise-address  "$(tailscale ip -4 | tr -d '\n')" \
 # --flannel-backend  host-gw \
 --flannel-iface      tailscale0
 
