@@ -40,7 +40,7 @@ sysctl -p
 sysctl net.ipv4.tcp_available_congestion_control
 ```
 
-# disable 127.0.0.53
+# Disable 127.0.0.53
 ```
 mkdir -p /etc/systemd/resolved.conf.d/
 cat >/etc/systemd/resolved.conf.d/98-disable-127-53.conf << EOF
