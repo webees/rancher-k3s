@@ -107,8 +107,9 @@ INSTALL_K3S_VERSION=v1.32.5+k3s1 sh -s - \
 --kubelet-arg        "eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%" \
 --kube-proxy-arg     "ipvs-scheduler=lc,proxy-mode=ipvs" \
 --node-external-ip   "$(curl -4 -s https://ifconfig.me)" \
---node-ip            "$(tailscale ip -4)" \
---vpn-auth           "name=tailscale,joinKey=XXXXXXXXXXXXXXXXXXXXXXXX"
+--node-external-ip   "$(curl -4 -s https://ifconfig.me)" \
+--node-ip            "$(tailscale ip -4 | tr -d '\n')" \
+--flannel-iface      "tailscale0"
 ```
 
 ```shell
