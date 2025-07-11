@@ -225,8 +225,7 @@ helm repo update
 # Install the cert-manager Helm chart
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --create-namespace \
-  --set crds.enabled=true
+  --create-namespace
 ```
 
 # rancher
@@ -238,8 +237,8 @@ helm repo update
 helm upgrade --install rancher rancher-stable/rancher \
   --namespace cattle-system \
   --create-namespace \
-  --version 2.7.5 \
-  --set hostname=rancher.dev.run \
+  --version 2.11.3 \
+  --set hostname=k3s.run \
   --set replicas=1 \
   --set global.cattle.psp.enabled=false # For Kubernetes v1.25 or later, set global.cattle.psp.enabled to false.
 ```
