@@ -10,6 +10,12 @@ apt-get upgrade
 apt-get upgrade linux-image-generic
 ```
 
+```
+apt update
+apt install --install-recommends linux-generic-hwe-22.04 -y
+reboot
+```
+
 # UFW Firewall Management
 ```bash
 ufw status verbose
