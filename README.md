@@ -188,7 +188,6 @@ K3S_URL=https://XX.XX.XX.XX:6443 \
 K3S_TOKEN=XXXXXXXXXXXXXXXXXXXXXXXX \
 INSTALL_K3S_VERSION=v1.31.6+k3s1 sh -s - \
 --kubelet-arg        "eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%" \
---kube-proxy-arg     "ipvs-scheduler=wlc,proxy-mode=ipvs" \
 --node-external-ip   "$(curl -4 -s https://ifconfig.me)" \
 --node-ip            "$(tailscale ip -4 | tr -d '\n')" \
 --flannel-iface      "tailscale0"
@@ -237,7 +236,6 @@ INSTALL_K3S_VERSION=v1.31.6+k3s1 sh -s - \
 --service-cidr 10.43.0.0/16 \
 --kubelet-arg        "eviction-hard=memory.available<1%,imagefs.available<1%,imagefs.inodesFree<1%,nodefs.available<1%,nodefs.inodesFree<1%" \
 --kube-apiserver-arg "service-node-port-range=1-65535" \
---kube-proxy-arg     "ipvs-scheduler=lc,proxy-mode=ipvs" \
 --node-external-ip   "$(curl -4 -s https://ifconfig.me)" \
 --node-ip            "$(tailscale ip -4 | tr -d '\n')" \
 --advertise-address  "$(tailscale ip -4 | tr -d '\n')" \
